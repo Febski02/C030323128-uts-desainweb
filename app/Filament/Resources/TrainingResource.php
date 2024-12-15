@@ -8,10 +8,7 @@ use App\Models\Training;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\TrainingResource\Pages;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\TrainingResource\RelationManagers;
 
 class TrainingResource extends Resource
 {
@@ -23,7 +20,6 @@ class TrainingResource extends Resource
     {
         return $form
             ->schema([
-                //
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(255),
@@ -50,12 +46,15 @@ class TrainingResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title'),
-                Tables\Columns\TextColumn::make('start_date'),
-                Tables\Columns\TextColumn::make('end_date'),
+                Tables\Columns\TextColumn::make('start_date')
+                    ->dateTime(),
+                Tables\Columns\TextColumn::make('end_date')
+                    ->dateTime(),
                 Tables\Columns\TextColumn::make('trainer.name'),
                 Tables\Columns\TextColumn::make('location'),
-                Tables\Columns\TextColumn::make('max_participants'),
-                
+                Tables\Columns\TextColumn::make('max_participants')
+                    ->numeric(),
+                Tables\Columns\TextColumn::make('description')
             ])
             ->filters([
                 //
@@ -64,9 +63,7 @@ class TrainingResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 

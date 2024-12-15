@@ -25,12 +25,10 @@ class TrainingParticipantResource extends Resource
         ->schema([
             Forms\Components\Select::make('training_id')
                 ->relationship('training', 'title')
-                ->required()
-                ->searchable(),
+                ->required(),
             Forms\Components\Select::make('farmer_id')
                 ->relationship('farmer', 'name')
-                ->required()
-                ->searchable(),
+                ->required(),
             Forms\Components\Select::make('status')
                 ->options([
                     'registered' => 'Terdaftar',

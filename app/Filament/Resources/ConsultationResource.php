@@ -8,10 +8,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Consultation;
 use Filament\Resources\Resource;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ConsultationResource\Pages;
-use App\Filament\Resources\ConsultationResource\RelationManagers;
 
 class ConsultationResource extends Resource
 {
@@ -22,43 +19,40 @@ class ConsultationResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-                ->schema([
-                    Forms\Components\Select::make('farmer_id')
-                        ->relationship('farmer', 'name')
-                        ->required()
-                        ->searchable(),
-                    Forms\Components\Select::make('consultant_id')
-                        ->relationship('consultant', 'name')
-                        ->required()
-                        ->searchable(),
-                    Forms\Components\TextInput::make('topic')
-                        ->required()
-                        ->maxLength(255),
-                    Forms\Components\Textarea::make('description')
-                        ->required(),
-                    Forms\Components\Select::make('status')
-                        ->options([
-                            'pending' => 'Menunggu',
-                            'in_progress' => 'Sedang Berlangsung',
-                            'completed' => 'Selesai',
-                            'cancelled' => 'Dibatalkan',
-                        ])
-                        ->required(),
-                    Forms\Components\DateTimePicker::make('scheduled_at')
-                        ->required(),
-                    Forms\Components\Textarea::make('notes')
-                        ->nullable(),
-                ]);
+            ->schema([
+                Forms\Components\Select::make('farmer_id')
+                    ->relationship('farmer', 'name')
+                    ->required(),
+                Forms\Components\Select::make('consultant_id') // Change this line
+                    ->relationship('consultant', 'name') // Change this line
+                    ->required(),
+                Forms\Components\TextInput::make('topic')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('description')
+                    ->required(),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'pending' => 'Menunggu',
+                        'in_progress' => 'Sedang Berlangsung',
+                        'completed' => 'Selesai',
+                        'cancelled' => 'Dibatalkan',
+                    ])
+                    ->required(),
+                Forms\Components\DateTimePicker::make('scheduled_at')
+                    ->required(),
+                Forms\Components\Textarea::make('notes')
+                    ->nullable(),
+            ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                //
                 Tables\Columns\TextColumn::make('farmer.name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('consultant.name')
+                Tables\Columns\TextColumn::make('consultant.name') // Change this line
                     ->searchable(),
                 Tables\Columns\TextColumn::make('topic'),
                 Tables\Columns\BadgeColumn::make('status')
@@ -70,7 +64,6 @@ class ConsultationResource extends Resource
                     ]),
                 Tables\Columns\TextColumn::make('scheduled_at')
                     ->dateTime(),
-
             ])
             ->filters([
                 //
@@ -79,9 +72,7 @@ class ConsultationResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
